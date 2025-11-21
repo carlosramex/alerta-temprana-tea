@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Alerta Temprana TEA - USAER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7f4;
+      color: #222;
+    }
+    header {
+      background: #0c5c3b; /* verde institucional */
+      color: white;
+      padding: 1rem 1.5rem;
+    }
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .logos {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logos img {
+      height: 42px;
+      object-fit: contain;
+    }
+    .header-text {
+      text-align: right;
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+    .header-main {
+      text-align: center;
+      margin-top: 0.8rem;
+    }
+    .header-main h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    .header-main p {
+      margin: 0.25rem 0 0.4rem;
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+    .subtag {
+      display: inline-block;
+      margin-top: 0.2rem;
+      padding: 0.1rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      font-size: 0.78rem;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 1.2rem auto 2rem;
+      padding: 0 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
+      border: 1px solid #dde3d9;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      color: #15482b;
+    }
+    .disclaimer {
+      font-size: 0.9rem;
+      background: #fff7e5;
+      border-left: 4px solid #e7a41a;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+    .field-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    input[type="number"] {
+      width: 100%;
+      max-width: 140px;
+      padding: 0.4rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #b8c7b4;
+      font-size: 0.95rem;
+    }
+    .age-note {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 0.2rem;
+    }
+    .question {
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid #edf0ea;
+    }
+    .question:last-child {
+      border-bottom: none;
+    }
+    .question p {
+      margin: 0 0 0.3rem;
+      font-size: 0.95rem;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      font-size: 0.9rem;
+    }
+    .options label {
+      font-weight: 400;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-primary {
+      background: #0c5c3b;
+      color: white;
+    }
+    .btn-secondary {
+      background: #e1efe7;
+      color: #15482b;
+    }
+    .btn-primary:hover {
+      background: #09452c;
+    }
+    .btn-secondary:hover {
+      background: #d0e5da;
+    }
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .result-low {
+      background: #e4f6ec;
+      border-left: 4px solid #35a665;
+    }
+    .result-medium {
+      background: #fff6e5;
+      border-left: 4px solid #ffb522;
+    }
+    .result-high {
+      background: #ffe9e9;
+      border-left: 4px solid #ff4b4b;
+    }
+    .result h3 {
+      margin-top: 0;
+      margin-bottom: 0.3rem;
+      font-size: 1.05rem;
+    }
+    .result span.score {
+      font-weight: 700;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 1rem;
+      color: #555;
+      border-top: 1px solid #dde3d9;
+      background: #f0f4ef;
+    }
+    footer strong {
+      color: #0c5c3b;
+    }
+
+    @media (min-width: 700px) {
+      .age-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .header-text {
+        text-align: right;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div class="logos">
+        <!-- Reemplaza los src con los nombres reales de tus archivos de logo -->
+        <img src="logo-sep.png" alt="Logo SEP" />
+        <img src="logo-usaer.png" alt="Logo USAER" />
+        <img src="logo-uasep.png" alt="Logo UASEP" />
+      </div>
+      <div class="header-text">
+        <div><strong>Supervisión 1 UASEP</strong></div>
+        <div>USAER · Educación Especial · Tamaulipas</div>
+      </div>
+    </div>
+    <div class="header-main">
+      <h1>🧠 Alerta Temprana TEA</h1>
+      <p>Cuestionario informativo de signos de alerta (3 meses a 5 años)</p>
+      <div class="subtag">Herramienta orientativa para familias y docentes · No sustituye diagnóstico médico</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>⚠️ Importante</h2>
+      <div class="disclaimer">
+        <strong>NO ES UN DIAGNÓSTICO MÉDICO.</strong> Esta herramienta es exclusivamente informativa
+        y no sustituye la evaluación realizada por profesionales de la salud (pediatra, neurólogo,
+        paidopsiquiatra o psicólogo clínico). Si la puntuación es moderada o alta, o si usted tiene
+        preocupaciones, consulte a un especialista.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>1. Datos del niño o niña</h2>
+      <div class="field-group age-row">
+        <div>
+          <label for="edadMeses">Edad (en meses)</label>
+          <input type="number" id="edadMeses" min="3" max="60" value="18" />
+          <div class="age-note">
+            Orientación: 3–17 meses (signos muy tempranos) · 18–60 meses (cuestionario ampliado).
+          </div>
+        </div>
+        <button class="btn-secondary" id="btnSeleccionarEdad">Actualizar preguntas según edad</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Cuestionario de signos de alerta</h2>
+      <p style="font-size:0.9rem; margin-top:0;">
+        Responda <strong>“Sí”</strong> (1 punto) si observa con frecuencia el comportamiento descrito
+        en su hijo/a. Responda <strong>“No”</strong> si no lo observa o no está seguro.
+      </p>
+      <div id="questionsContainer"></div>
+      <button class="btn-primary" id="btnCalcular">
+        Ver resultado de alerta
+      </button>
+    </section>
+
+    <section class="card" id="resultSection" style="display:none;">
+      <h2>3. Resultado</h2>
+      <div id="resultBox" class="result"></div>
+    </section>
+  </main>
+
+  <footer>
+    Desarrollado por <strong>Carlos Alberto Martínez Ramírez</strong> · Asesor Técnico Pedagógico ·
+    Supervisión 1 UASEP · USAER Tamaulipas.
+  </footer>
+
+  <script>
+    // ----- Definición de preguntas -----
+
+    // Bloque para 3–17 meses (signos muy tempranos, lenguaje y socialización básica)
+    const questionsEarly = [
+      {
+        id: "e1",
+        text: "¿A los 3–4 meses no sonríe socialmente (por ejemplo, al ver su rostro o cuando le hablan)?",
+        alertIfYes: true
+      },
+      {
+        id: "e2",
+        text: "¿Parece no hacer contacto visual frecuente (no lo mira a los ojos o evita la mirada)?",
+        alertIfYes: true
+      },
+      {
+        id: "e3",
+        text: "¿No balbucea ni hace sonidos buscando interacción (por ejemplo, 'ah', 'gu', 'ba') después de los 6 meses?",
+        alertIfYes: true
+      },
+      {
+        id: "e4",
+        text: "¿No responde ni se sobresalta ante sonidos fuertes o ante su voz (parece no escuchar)?",
+        alertIfYes: true
+      },
+      {
+        id: "e5",
+        text: "¿Parece muy indiferente a las personas, prefiere mirar objetos o luces más que las caras?",
+        alertIfYes: true
+      },
+      {
+        id: "e6",
+        text: "¿Presenta movimientos repetitivos persistentes (ej. mover manos, dedos o cuerpo de forma rígida) que se repiten muchas veces al día?",
+        alertIfYes: true
+      },
+      {
+        id: "e7",
+        text: "¿Se muestra extremadamente irritable o difícil de consolar sin causa aparente de manera muy frecuente?",
+        alertIfYes: true
+      }
+    ];
+
+    // Bloque para 18–60 meses (usa tu cuestionario como base + algunos ítems extra)
+    const questionsStandard = [
+      {
+        id: "q1",
+        text: "¿Busca activamente compartir su alegría o interés con usted (por ejemplo, le señala un objeto o le trae un juguete)?",
+        alertIfYes: false,
+        inverted: true
+      },
+      {
+        id: "q2",
+        text: "¿Responde a su nombre cuando le llama?",
+        alertIfYes: false,
+        inverted: true
+      },
+      {
+        id: "q3",
+        text: "¿Muestra interés en otros niños y trata de interactuar con ellos?",
+        alertIfYes: false,
+        inverted: true
+      },
+      {
+        id: "q4",
+        text: "¿Imita las acciones de otras personas (por ejemplo, aplaudir, sacar la lengua, juegos de imitación)?",
+        alertIfYes: false,
+        inverted: true
+      },
+      {
+        id: "q5",
+        text: "¿Utiliza gestos para comunicarse (por ejemplo, señalar lo que quiere, agitar la mano para decir adiós)?",
+        alertIfYes: false,
+        inverted: true
+      },
+      {
+        id: "q6",
+        text: "¿Dice frases de dos o más palabras que no son solo repetición (por ejemplo, 'quiero agua', 'vamos afuera')?",
+        alertIfYes: false,
+        inverted: true
+      },
+      {
+        id: "q7",
+        text: "¿Pierde las habilidades del lenguaje o sociales que ya había adquirido?",
+        alertIfYes: true
+      },
+      {
+        id: "q8",
+        text: "¿Realiza movimientos repetitivos con el cuerpo (por ejemplo, aletear las manos, mecerse) sin razón aparente?",
+        alertIfYes: true
+      },
+      {
+        id: "q9",
+        text: "¿Se enfoca excesivamente en partes de juguetes (por ejemplo, las ruedas de un carro) en lugar de jugar con el juguete completo?",
+        alertIfYes: true
+      },
+      {
+        id: "q10",
+        text: "¿Se molesta mucho por pequeños cambios en su rutina o entorno (por ejemplo, cambiar el camino, mover un objeto de lugar)?",
+        alertIfYes: true
+      },
+      {
+        id: "q11",
+        text: "¿Le cuesta trabajo entender instrucciones sencillas para su edad (por ejemplo, 'trae el zapato', 'siéntate aquí')?",
+        alertIfYes: true
+      },
+      {
+        id: "q12",
+        text: "¿Parece preferir jugar solo la mayor parte del tiempo y evita el contacto o juego con otros niños?",
+        alertIfYes: true
+      }
+    ];
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const btnEdad = document.getElementById("btnSeleccionarEdad");
+    const btnCalcular = document.getElementById("btnCalcular");
+    const resultSection = document.getElementById("resultSection");
+    const resultBox = document.getElementById("resultBox");
+    const edadInput = document.getElementById("edadMeses");
+
+    let currentQuestions = [];
+
+    function renderQuestions(questions) {
+      questionsContainer.innerHTML = "";
+      questions.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+          <p><strong>${index + 1}.</strong> ${q.text}</p>
+          <div class="options">
+            <label>
+              <input type="radio" name="${q.id}" value="si" />
+              Sí
+            </label>
+            <label>
+              <input type="radio" name="${q.id}" value="no" />
+              No
+            </label>
+          </div>
+        `;
+        questionsContainer.appendChild(div);
+      });
+    }
+
+    function updateQuestionsByAge() {
+      const edad = parseInt(edadInput.value || "0", 10);
+      if (edad >= 3 && edad <= 17) {
+        currentQuestions = questionsEarly;
+      } else if (edad >= 18 && edad <= 60) {
+        currentQuestions = questionsStandard;
+      } else {
+        alert("Por favor, ingrese una edad entre 3 y 60 meses.");
+        return;
+      }
+      renderQuestions(currentQuestions);
+      resultSection.style.display = "none";
+    }
+
+    function calculateScore() {
+      let score = 0;
+      let unanswered = 0;
+      currentQuestions.forEach(q => {
+        const radios = document.querySelectorAll(`input[name="${q.id}"]`);
+        let value = null;
+        radios.forEach(r => {
+          if (r.checked) value = r.value;
+        });
+        if (!value) {
+          unanswered++;
+          return;
+        }
+        if (q.alertIfYes && value === "si") {
+          score++;
+        } else if (q.inverted && value === "no") {
+          score++;
+        }
+      });
+
+      const edad = parseInt(edadInput.value || "0", 10);
+      const totalQuestions = currentQuestions.length;
+
+      if (unanswered > 0) {
+        if (!confirm("Hay preguntas sin responder. ¿Desea ver el resultado de todos modos?")) {
+          return;
+        }
+      }
+
+      let level = "";
+      let cssClass = "";
+      let message = "";
+
+      if (edad >= 3 && edad <= 17) {
+        if (score === 0) {
+          level = "Alerta baja";
+          cssClass = "result-low";
+          message =
+            "No se observan signos de alerta significativos en este cuestionario. Sin embargo, continúe observando su desarrollo y acuda a revisiones pediátricas periódicas.";
+        } else if (score === 1 || score === 2) {
+          level = "Alerta moderada";
+          cssClass = "result-medium";
+          message =
+            "Se observan algunos signos tempranos que pueden ameritar seguimiento. Comente estas observaciones con su pediatra o un especialista en desarrollo infantil.";
+        } else {
+          level = "Alerta alta";
+          cssClass = "result-high";
+          message =
+            "Se observan varios signos tempranos de alerta. Es recomendable acudir con un pediatra, neurólogo pediatra o psicólogo especializado en desarrollo para una valoración más detallada.";
+        }
+      } else {
+        if (score <= 2) {
+          level = "Alerta baja";
+          cssClass = "result-low";
+          message =
+            "La cantidad de signos de alerta observados es baja. Si aun así tiene dudas o preocupaciones, puede consultar con un profesional para mayor tranquilidad.";
+        } else if (score <= 5) {
+          level = "Alerta moderada";
+          cssClass = "result-medium";
+          message =
+            "Se observan varios signos de alerta. Es recomendable agendar una consulta con un pediatra, neurólogo o psicólogo infantil para una evaluación más completa.";
+        } else {
+          level = "Alerta alta";
+          cssClass = "result-high";
+          message =
+            "Se observan numerosos signos de alerta en este cuestionario. Le sugerimos acudir lo antes posible con un especialista en desarrollo infantil o trastornos del espectro autista para una valoración profesional.";
+        }
+      }
+
+      resultBox.className = "result " + cssClass;
+      resultBox.innerHTML = `
+        <h3>${level}</h3>
+        <p>Puntuación de signos de alerta: <span class="score">${score}</span> de ${totalQuestions} ítems respondidos.</p>
+        <p>${message}</p>
+        <p style="font-size:0.85rem; margin-top:0.5rem; color:#555;">
+          Este resultado solo es orientativo. Un diagnóstico de TEA solo puede realizarlo un profesional de la salud
+          a través de una evaluación clínica completa.
+        </p>
+      `;
+      resultSection.style.display = "block";
+    }
+
+    btnEdad.addEventListener("click", updateQuestionsByAge);
+    btnCalcular.addEventListener("click", calculateScore);
+    updateQuestionsByAge();
+  </script>
+</body>
+</html>
